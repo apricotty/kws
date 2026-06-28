@@ -4,7 +4,7 @@ from datetime import datetime, timezone, timedelta
 import calendar
 
 def get_weather():
-    url = "https://api.open-meteo.com/v1/forecast?latitude=36.67&longitude=117.00&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FShanghai"
+    url = "https://api.open-meteo.com/v1/forecast?latitude=41.79&longitude=123.43&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FShanghai"
     try:
         response = requests.get(url, timeout=10)
         data = response.json()['current']
