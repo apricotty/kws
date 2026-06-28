@@ -2,7 +2,8 @@ name: Update Kindle Dashboard
 
 on:
   schedule:
-    - cron: '*/45 * * * *'
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
