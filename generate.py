@@ -8,6 +8,18 @@ CITY_NAME = "沈阳"
 LATITUDE = "41.79"
 LONGITUDE = "123.43"
 
+class KindleCalendar(calendar.HTMLCalendar):
+    def __init__(self, today):
+        super().__init__(calendar.SUNDAY)
+        self.today = today
+
+    def formatday(self, day, weekday):
+        if day == self.today:
+            return f'<td class="{self.cssclasses[weekday]} current-day">{day}</td>'
+        if day == 0:
+            return '<td class="noday">&nbsp;</td>'
+        return f'<td class="{self.cssclasses[weekday]}">{day}</td>'
+
 def get_weather():
     url = f"https://api.open-meteo.com/v1/forecast?latitude={LATITUDE}&longitude={LONGITUDE}&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FShanghai"
     try:
@@ -29,13 +41,9 @@ def generate_calendar():
     month = now.month
     today = now.day
 
-    cal = calendar.HTMLCalendar(calendar.SUNDAY)
+    cal = KindleCalendar(today)
     cal_html = cal.formatmonth(year, month)
     cal_html = cal_html.replace('<table border="0" cellpadding="0" cellspacing="0" class="month">', '<table class="calendar-table">')
-    
-    today_str = f'>{today}<'
-    current_day_str = f' class="current-day">{today}<'
-    cal_html = cal_html.replace(today_str, current_day_str)
     return cal_html
 
 def main():
