@@ -3,8 +3,13 @@ import requests
 from datetime import datetime, timezone, timedelta
 import calendar
 
+# 全局配置区域
+CITY_NAME = "沈阳"
+LATITUDE = "41.79"
+LONGITUDE = "123.43"
+
 def get_weather():
-    url = "https://api.open-meteo.com/v1/forecast?latitude=41.79&longitude=123.43&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FShanghai"
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={LATITUDE}&longitude={LONGITUDE}&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FShanghai"
     try:
         response = requests.get(url, timeout=10)
         data = response.json()['current']
@@ -45,7 +50,8 @@ def main():
     with open("template.html", "r", encoding="utf-8") as f:
         template = f.read()
         
-    output = template.replace("{{WEATHER_DESC}}", desc)
+    output = template.replace("{{CITY}}", CITY_NAME)
+    output = output.replace("{{WEATHER_DESC}}", desc)
     output = output.replace("{{TEMPERATURE}}", temp)
     output = output.replace("{{WIND}}", wind)
     output = output.replace("{{DAY}}", str(now.day))
