@@ -9,10 +9,8 @@
         .container { border: 2px solid #000; padding: 20px; }
         .header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
         .date-box { font-size: 48px; font-weight: bold; }
-        /* 修改后：将右侧天气框的整体字号从 24px 调小为 20px */
-        .weather-box { float: right; text-align: right; font-size: 20px; }
-        /* 修改后：将城市名称的字号也从 28px 调小为 20px，与天气描述一致，并保持加粗 */
-        .city-box { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+        .weather-box { float: right; text-align: right; font-size: 24px; }
+        .city-box { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
         .calendar-table { width: 100%; border-collapse: collapse; font-size: 20px; margin-top: 20px; }
         .calendar-table th, .calendar-table td { text-align: center; padding: 8px; }
         .current-day { background-color: #000; color: #fff; font-weight: bold; }
@@ -24,4 +22,19 @@
         <div class="header">
             <div class="weather-box">
                 <div class="city-box">{{CITY}}</div>
-                <div>{{WEATHER_DESC}}
+                <div>{{WEATHER_DESC}}</div>
+                <div>{{TEMPERATURE}}°C</div>
+                <div>{{WIND}}</div>
+            </div>
+            <div class="date-box">{{DAY}}</div>
+            <div>{{WEEKDAY}}</div>
+            <div>{{YEAR_MONTH}}</div>
+        </div>
+        <div style="clear: both;"></div>
+        {{CALENDAR_TABLE}}
+        <div class="footer">
+            每60分钟刷新 | 更新于: {{UPDATE_TIME}}
+        </div>
+    </div>
+</body>
+</html>
