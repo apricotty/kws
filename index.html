@@ -2,416 +2,46 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="3600">
-    <title>Kindle Weather Calendar</title>
+    <title>Kindle Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #fff;
-            color: #000;
-            font-family: "Georgia", "Times New Roman", "STSong", "SimSun", serif;
-            width: 600px;
-            height: 800px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
-        }
-
-        .card {
-            width: 560px;
-            border: 3px solid #000;
-            padding: 24px;
-            background: #fff;
-        }
-
-        .header {
-            font-size: 18px;
-            font-weight: bold;
-            border-bottom: 2px solid #000;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        .main-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #000;
-        }
-
-        .date-section {
-            text-align: center;
-            flex: 1;
-        }
-
-        .day-num {
-            font-size: 80px;
-            font-weight: bold;
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-
-        .weekday {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .full-date {
-            font-size: 14px;
-            color: #333;
-        }
-
-        .weather-section {
-            text-align: center;
-            flex: 1;
-            border-left: 1px solid #000;
-            padding-left: 20px;
-        }
-
-        .weather-icon {
-            font-size: 48px;
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-
-        .weather-text {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .temp {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .weather-detail {
-            font-size: 13px;
-            color: #333;
-        }
-
-        .calendar {
-            margin-top: 16px;
-        }
-
-        .cal-header {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-size: 14px;
-            gap: 4px 0;
-        }
-
-        .cal-grid .weekday-label {
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-            padding-bottom: 4px;
-            margin-bottom: 4px;
-        }
-
-        .cal-grid .day {
-            padding: 4px 0;
-            height: 28px;
-            line-height: 20px;
-        }
-
-        .cal-grid .day.today {
-            border: 2px solid #000;
-            font-weight: bold;
-        }
-
-        .cal-grid .day.other-month {
-            color: #999;
-        }
-
-        .footer {
-            margin-top: 16px;
-            padding-top: 10px;
-            border-top: 1px solid #000;
-            font-size: 11px;
-            color: #555;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .battery {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .battery-icon {
-            width: 24px;
-            height: 12px;
-            border: 1px solid #000;
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 1px;
-        }
-
-        .battery-icon::after {
-            content: '';
-            position: absolute;
-            right: -3px;
-            top: 3px;
-            width: 2px;
-            height: 4px;
-            background: #000;
-        }
-
-        .battery-fill {
-            height: 100%;
-            background: #000;
-        }
-
-        .error {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            padding: 20px;
-        }
-
-        /* 墨水屏优化：禁用动画，减少重绘 */
-        * {
-            animation: none !important;
-            transition: none !important;
-        }
+        body { font-family: monospace; color: #000; background-color: #fff; margin: 0; padding: 20px; width: 540px; }
+        .container { border: 2px solid #000; padding: 20px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+        .date-box { font-size: 48px; font-weight: bold; }
+        .weather-box { float: right; text-align: right; font-size: 24px; }
+        .calendar-table { width: 100%; border-collapse: collapse; font-size: 20px; margin-top: 20px; }
+        .calendar-table th, .calendar-table td { text-align: center; padding: 8px; }
+        .current-day { border: 2px solid #000; font-weight: bold; }
+        .footer { margin-top: 20px; font-size: 14px; text-align: center; border-top: 1px solid #000; padding-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="header">天气日历</div>
-
-        <div class="main-info">
-            <div class="date-section">
-                <div class="day-num" id="dayNum">--</div>
-                <div class="weekday" id="weekday">--</div>
-                <div class="full-date" id="fullDate">----年--月--日</div>
+    <div class="container">
+        <div class="header">
+            <div class="weather-box">
+                <div>雷阵雨</div>
+                <div>32.1°C</div>
+                <div>风速 15.2 km/h</div>
             </div>
-            <div class="weather-section">
-                <div class="weather-icon" id="weatherIcon">☀</div>
-                <div class="weather-text" id="weatherText">--</div>
-                <div class="temp" id="temp">--°</div>
-                <div class="weather-detail" id="weatherDetail">--</div>
-            </div>
+            <div class="date-box">28</div>
+            <div>星期日</div>
+            <div>2026年6月</div>
         </div>
-
-        <div class="calendar">
-            <div class="cal-header" id="calHeader">----年--月</div>
-            <div class="cal-grid" id="calGrid">
-                <div class="weekday-label">一</div>
-                <div class="weekday-label">二</div>
-                <div class="weekday-label">三</div>
-                <div class="weekday-label">四</div>
-                <div class="weekday-label">五</div>
-                <div class="weekday-label">六</div>
-                <div class="weekday-label">日</div>
-            </div>
-        </div>
+        <div style="clear: both;"></div>
+        <table class="calendar-table">
+<tr><th colspan="7" class="month">June 2026</th></tr>
+<tr><th class="sun">Sun</th><th class="mon">Mon</th><th class="tue">Tue</th><th class="wed">Wed</th><th class="thu">Thu</th><th class="fri">Fri</th><th class="sat">Sat</th></tr>
+<tr><td class="noday">&nbsp;</td><td class="mon">1</td><td class="tue">2</td><td class="wed">3</td><td class="thu">4</td><td class="fri">5</td><td class="sat">6</td></tr>
+<tr><td class="sun">7</td><td class="mon">8</td><td class="tue">9</td><td class="wed">10</td><td class="thu">11</td><td class="fri">12</td><td class="sat">13</td></tr>
+<tr><td class="sun">14</td><td class="mon">15</td><td class="tue">16</td><td class="wed">17</td><td class="thu">18</td><td class="fri">19</td><td class="sat">20</td></tr>
+<tr><td class="sun">21</td><td class="mon">22</td><td class="tue">23</td><td class="wed">24</td><td class="thu">25</td><td class="fri">26</td><td class="sat">27</td></tr>
+<tr><td class="sun" class="current-day">28</td><td class="mon">29</td><td class="tue">30</td><td class="noday">&nbsp;</td><td class="noday">&nbsp;</td><td class="noday">&nbsp;</td><td class="noday">&nbsp;</td></tr>
+</table>
 
         <div class="footer">
-            <span id="refreshInfo">每60分钟刷新</span>
-            <span id="updateTime">----</span>
-            <div class="battery">
-                <div class="battery-icon">
-                    <div class="battery-fill" id="batteryFill" style="width: 80%"></div>
-                </div>
-                <span id="batteryText">--%</span>
-            </div>
+            每60分钟刷新 | 更新于: 2026-06-28 10:19:56
         </div>
     </div>
-
-    <script>
-        // ==================== 配置区 ====================
-        const CONFIG = {
-            lat: 41.79,        // 纬度
-            lon: 123.43,       // 经度
-            city: '沈阳',       // 显示城市名
-            timezone: 'Asia/Shanghai',
-            refreshInterval: 60 // 分钟
-        };
-
-        // WMO 天气代码转中文和图标
-        function getWeatherInfo(code) {
-            const map = {
-                0:  { text: '晴', icon: '☀' },
-                1:  { text: '晴', icon: '🌤' },
-                2:  { text: '多云', icon: '⛅' },
-                3:  { text: '阴', icon: '☁' },
-                45: { text: '雾', icon: '🌫' },
-                48: { text: '雾凇', icon: '🌫' },
-                51: { text: '小雨', icon: '🌦' },
-                53: { text: '中雨', icon: '🌧' },
-                55: { text: '大雨', icon: '🌧' },
-                61: { text: '小雨', icon: '🌦' },
-                63: { text: '中雨', icon: '🌧' },
-                65: { text: '大雨', icon: '🌧' },
-                71: { text: '小雪', icon: '❄' },
-                73: { text: '中雪', icon: '❄' },
-                75: { text: '大雪', icon: '❄' },
-                80: { text: '阵雨', icon: '🌦' },
-                81: { text: '阵雨', icon: '🌧' },
-                82: { text: '暴雨', icon: '⛈' },
-                95: { text: '雷雨', icon: '⚡' },
-                96: { text: '雷雨', icon: '⛈' },
-                99: { text: '雷雨', icon: '⛈' }
-            };
-            return map[code] || { text: '未知', icon: '?' };
-        }
-
-        // 获取星期几（周一=1，周日=7）
-        function getWeekday(date) {
-            const d = date.getDay();
-            return d === 0 ? 7 : d;
-        }
-
-        // 格式化日期
-        function formatDate(date) {
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, '0');
-            const d = String(date.getDate()).padStart(2, '0');
-            return `${y}年${m}月${d}日`;
-        }
-
-        // 获取星期名称
-        function getWeekdayName(date) {
-            const names = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-            return names[date.getDay()];
-        }
-
-        // 渲染日历
-        function renderCalendar(date) {
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const today = date.getDate();
-
-            document.getElementById('calHeader').textContent = `${year}年${String(month + 1).padStart(2, '0')}月`;
-
-            const grid = document.getElementById('calGrid');
-            // 保留表头，清除旧数据
-            const headers = grid.querySelectorAll('.weekday-label');
-            grid.innerHTML = '';
-            headers.forEach(h => grid.appendChild(h));
-
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startWeekday = getWeekday(firstDay);
-
-            // 上月填充
-            const prevLastDay = new Date(year, month, 0).getDate();
-            for (let i = startWeekday - 2; i >= 0; i--) {
-                const div = document.createElement('div');
-                div.className = 'day other-month';
-                div.textContent = prevLastDay - i;
-                grid.appendChild(div);
-            }
-
-            // 当月
-            for (let d = 1; d <= daysInMonth; d++) {
-                const div = document.createElement('div');
-                div.className = 'day';
-                if (d === today) div.classList.add('today');
-                div.textContent = d;
-                grid.appendChild(div);
-            }
-
-            // 下月填充
-            const totalCells = grid.children.length - 7; // 减去表头
-            const remaining = (7 - (totalCells % 7)) % 7;
-            for (let d = 1; d <= remaining; d++) {
-                const div = document.createElement('div');
-                div.className = 'day other-month';
-                div.textContent = d;
-                grid.appendChild(div);
-            }
-        }
-
-        // 获取天气
-        async function fetchWeather() {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.lat}&longitude=${CONFIG.lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=${encodeURIComponent(CONFIG.timezone)}`;
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                const current = data.current;
-                const info = getWeatherInfo(current.weather_code);
-
-                document.getElementById('weatherIcon').textContent = info.icon;
-                document.getElementById('weatherText').textContent = info.text;
-                document.getElementById('temp').textContent = current.temperature_2m + '°';
-                document.getElementById('weatherDetail').textContent = `${CONFIG.city} 风${current.wind_speed_10m}km/h`;
-            } catch (e) {
-                document.getElementById('weatherText').textContent = '获取失败';
-                console.error(e);
-            }
-        }
-
-        // 获取电量（Kindle 浏览器可能不支持，用随机数模拟）
-        function updateBattery() {
-            if (navigator.getBattery) {
-                navigator.getBattery().then(b => {
-                    const level = Math.round(b.level * 100);
-                    document.getElementById('batteryFill').style.width = level + '%';
-                    document.getElementById('batteryText').textContent = level + '%';
-                });
-            } else {
-                // 模拟电量，实际使用时可删除或固定值
-                document.getElementById('batteryFill').style.width = '88%';
-                document.getElementById('batteryText').textContent = '88%';
-            }
-        }
-
-        // 更新时间
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('dayNum').textContent = now.getDate();
-            document.getElementById('weekday').textContent = getWeekdayName(now);
-            document.getElementById('fullDate').textContent = formatDate(now);
-            document.getElementById('updateTime').textContent = formatDate(now) + ' ' + 
-                String(now.getHours()).padStart(2, '0') + ':' + 
-                String(now.getMinutes()).padStart(2, '0') + ':' + 
-                String(now.getSeconds()).padStart(2, '0');
-        }
-
-        // 初始化
-        function init() {
-            const now = new Date();
-            updateTime();
-            renderCalendar(now);
-            fetchWeather();
-            updateBattery();
-            document.getElementById('refreshInfo').textContent = `每${CONFIG.refreshInterval}分钟刷新`;
-
-            // 每分钟更新时间和日期
-            setInterval(updateTime, 60000);
-
-            // 按配置间隔刷新天气
-            setInterval(fetchWeather, CONFIG.refreshInterval * 60000);
-        }
-
-        init();
-    </script>
 </body>
 </html>
